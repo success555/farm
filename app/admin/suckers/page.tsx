@@ -68,15 +68,15 @@ export default function DashboardSuckersPage() {
   const totalHarvested = batches.reduce((sum, b) => sum + b.quantityHarvested, 0);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Page Title */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-farm-800 uppercase tracking-wider bg-emerald-100/80 px-2.5 py-1 rounded-md mb-1.5">
+          <div className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-farm-800 uppercase tracking-wider bg-emerald-100/80 px-2.5 py-1 rounded-md mb-1 sm:mb-1.5">
             <Sprout className="w-3.5 h-3.5" />
             <span>High-Yield Plantain Propagation Division</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+          <h1 className="text-xl sm:text-3xl font-black text-gray-900 tracking-tight">
             Plantain Sucker Nursery Desk
           </h1>
           <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
@@ -84,47 +84,47 @@ export default function DashboardSuckersPage() {
           </p>
         </div>
 
-        <div className="bg-emerald-50 border border-emerald-200 px-4 py-2.5 rounded-2xl flex items-center gap-3">
-          <ShieldCheck className="w-6 h-6 text-emerald-700 shrink-0" />
+        <div className="bg-emerald-50 border border-emerald-200 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl flex items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
+          <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-700 shrink-0" />
           <div className="text-xs">
             <span className="font-extrabold text-emerald-950 block">Bio-Treatment Guarantee</span>
-            <span className="text-emerald-700 font-semibold">95%+ Field Survival Verified</span>
+            <span className="text-emerald-700 font-semibold text-[11px] sm:text-xs">95%+ Field Survival Verified</span>
           </div>
         </div>
       </div>
 
       {/* Top Nursery Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm space-y-2">
-          <span className="text-xs font-bold text-gray-400 uppercase tracking-wider block">
-            Total Sucker Nursery Capacity
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-5">
+        <div className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-6 shadow-sm space-y-1 sm:space-y-2">
+          <span className="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-wider block">
+            Total Sucker Capacity
           </span>
-          <p className="text-3xl font-black text-farm-900">{totalHarvested.toLocaleString()} units</p>
-          <p className="text-xs text-gray-500">Across 3 active propagation beds</p>
+          <p className="text-2xl sm:text-3xl font-black text-farm-900">{totalHarvested.toLocaleString()} units</p>
+          <p className="text-[11px] sm:text-xs text-gray-500">Across 3 active propagation beds</p>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm space-y-2">
-          <span className="text-xs font-bold text-gray-400 uppercase tracking-wider block">
-            Ready For Immediate Dispatch
+        <div className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-6 shadow-sm space-y-1 sm:space-y-2">
+          <span className="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-wider block">
+            Ready For Dispatch
           </span>
-          <p className="text-3xl font-black text-emerald-700">{totalAvailable.toLocaleString()} units</p>
-          <p className="text-xs text-emerald-700 font-bold">Sword suckers & Maiden heads</p>
+          <p className="text-2xl sm:text-3xl font-black text-emerald-700">{totalAvailable.toLocaleString()} units</p>
+          <p className="text-[11px] sm:text-xs text-emerald-700 font-bold">Sword suckers & Maiden heads</p>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm space-y-2">
-          <span className="text-xs font-bold text-gray-400 uppercase tracking-wider block">
-            Reserved / Staged For Boat Cargo
+        <div className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-6 shadow-sm space-y-1 sm:space-y-2">
+          <span className="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-wider block">
+            Reserved / Boat Freight
           </span>
-          <p className="text-3xl font-black text-gold-600">
+          <p className="text-2xl sm:text-3xl font-black text-gold-600">
             {(totalHarvested - totalAvailable).toLocaleString()} units
           </p>
-          <p className="text-xs text-gray-500">Scheduled for Warri & Port Harcourt off-takers</p>
+          <p className="text-[11px] sm:text-xs text-gray-500">Scheduled for Warri & PH off-takers</p>
         </div>
       </div>
 
       {/* Bio-Treatment Protocols Banner */}
-      <div className="bg-gradient-to-r from-farm-900 to-farm-800 text-white rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 shadow-md">
-        <div className="relative w-28 h-28 rounded-2xl overflow-hidden shrink-0 border border-farm-700 shadow-md">
+      <div className="bg-gradient-to-r from-farm-900 to-farm-800 text-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 flex flex-col md:flex-row items-center gap-4 sm:gap-6 shadow-md">
+        <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden shrink-0 border border-farm-700 shadow-md">
           <Image
             src="/images/plantain-sucker-treatment-tub.jpg"
             alt="Bio treatment tub"
@@ -133,28 +133,60 @@ export default function DashboardSuckersPage() {
           />
         </div>
 
-        <div className="space-y-2 flex-1">
-          <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-gold-400 uppercase tracking-wider">
+        <div className="space-y-1.5 sm:space-y-2 flex-1 text-center md:text-left">
+          <div className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] font-bold text-gold-400 uppercase tracking-wider">
             <Thermometer className="w-3.5 h-3.5" />
             <span>Standard Operating Procedure (SOP)</span>
           </div>
-          <h3 className="text-xl font-black text-white">Three-Tier Bio-Sanitization Protocol</h3>
+          <h3 className="text-lg sm:text-xl font-black text-white">Three-Tier Bio-Sanitization Protocol</h3>
           <p className="text-xs text-gray-300 leading-relaxed">
             Every sucker harvested from Doutare Agro Farm undergoes (1) Root paring to expose clean corm tissue, (2) Hot water thermal immersion at 54°C to destroy weevil larvae, and (3) Bio-antagonist dip to inoculate against soil-borne nematodes.
           </p>
         </div>
       </div>
 
-      {/* Sucker Batches Manifest Table */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden space-y-4">
-        <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+      {/* Sucker Batches Manifest */}
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden space-y-3 sm:space-y-4">
+        <div className="p-4 sm:p-6 border-b border-gray-100 flex justify-between items-center">
           <div>
-            <h2 className="text-lg font-black text-gray-900 tracking-tight">Active Sucker Harvest Batches</h2>
-            <p className="text-xs text-gray-500">Track treatment timelines, nursery bed origin, and stock reservations</p>
+            <h2 className="text-base sm:text-lg font-black text-gray-900 tracking-tight">Active Sucker Harvest Batches</h2>
+            <p className="text-[11px] sm:text-xs text-gray-500">Track treatment timelines, nursery bed origin, and stock reservations</p>
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* Mobile View: Batch Cards */}
+        <div className="block md:hidden divide-y divide-gray-100 p-2">
+          {batches.map((batch) => (
+            <div key={batch.id} className="p-3.5 space-y-2 text-xs">
+              <div className="flex justify-between items-start">
+                <div>
+                  <span className="font-mono font-bold text-gray-900 block">{batch.batchCode}</span>
+                  <span className="font-black text-farm-900">{batch.grade}</span>
+                  <span className="text-[10px] text-gray-400 block">{batch.nurseryBed}</span>
+                </div>
+                <span
+                  className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase ${
+                    batch.status === 'Ready for Dispatch'
+                      ? 'bg-emerald-100 text-emerald-800'
+                      : batch.status === 'In Bio-Treatment'
+                      ? 'bg-amber-100 text-amber-800'
+                      : 'bg-blue-100 text-blue-800'
+                  }`}
+                >
+                  {batch.status}
+                </span>
+              </div>
+
+              <div className="flex justify-between items-center pt-1 border-t border-gray-100 text-gray-600">
+                <span>Harvested: <strong>{batch.quantityHarvested}</strong></span>
+                <span className="text-emerald-700 font-bold">Available: {batch.availableStock}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop View: Table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-gray-50 text-gray-600 uppercase font-bold text-[11px] border-b border-gray-200">
               <tr>
@@ -198,4 +230,3 @@ export default function DashboardSuckersPage() {
     </div>
   );
 }
-

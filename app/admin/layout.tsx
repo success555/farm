@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/navigation';
 import NextLink from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -10,16 +9,13 @@ import {
   Package,
   Sprout,
   Users,
-  Settings,
   ExternalLink,
   Menu,
   X,
   Bell,
   Search,
-  ShieldCheck,
-  TrendingUp,
 } from 'lucide-react';
-import { UserButton, SignedIn, SignedOut, SignInButton, useUser } from '@clerk/nextjs';
+import { UserButton, SignedIn, useUser } from '@clerk/nextjs';
 
 export default function DashboardLayout({
   children,
@@ -66,9 +62,9 @@ export default function DashboardLayout({
       >
         <div>
           {/* Sidebar Header */}
-          <div className="p-6 border-b border-[#0f3d24] flex items-center justify-between">
+          <div className="p-5 sm:p-6 border-b border-[#0f3d24] flex items-center justify-between">
             <NextLink href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-farm-800 text-gold-400 flex items-center justify-center font-bold text-lg border border-farm-700 shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-farm-800 text-gold-400 flex items-center justify-center font-bold text-lg border border-farm-700 shadow-sm shrink-0">
                 DA
               </div>
               <div>
@@ -82,13 +78,14 @@ export default function DashboardLayout({
             <button
               onClick={() => setSidebarOpen(false)}
               className="lg:hidden p-1.5 rounded-lg text-slate-300 hover:text-white"
+              aria-label="Close Sidebar"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Quick Farm Status */}
-          <div className="px-6 py-4 border-b border-[#0f3d24] bg-[#0c361e]">
+          <div className="px-5 sm:px-6 py-3.5 sm:py-4 border-b border-[#0f3d24] bg-[#0c361e]">
             <div className="flex items-center justify-between text-xs">
               <span className="text-slate-300 font-medium">Ayakoromo Farm</span>
               <span className="inline-flex items-center gap-1.5 text-emerald-400 font-bold">
@@ -100,7 +97,7 @@ export default function DashboardLayout({
           </div>
 
           {/* Nav Links */}
-          <nav className="p-4 space-y-1.5">
+          <nav className="p-3 sm:p-4 space-y-1 sm:space-y-1.5">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
@@ -109,14 +106,14 @@ export default function DashboardLayout({
                   key={item.href}
                   href={item.href}
                   onClick={() => setSidebarOpen(false)}
-                  className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition ${
+                  className={`flex items-center justify-between px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-semibold transition ${
                     isActive
                       ? 'bg-emerald-600 text-white shadow-md'
                       : 'text-slate-200 hover:bg-[#14532d] hover:text-white'
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-slate-300'}`} />
+                    <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isActive ? 'text-white' : 'text-slate-300'}`} />
                     <span>{item.label}</span>
                   </div>
                   {item.badge && (
@@ -137,10 +134,10 @@ export default function DashboardLayout({
         </div>
 
         {/* Sidebar Footer */}
-        <div className="p-5 border-t border-[#0f3d24] bg-[#051c0f] space-y-2">
+        <div className="p-4 sm:p-5 border-t border-[#0f3d24] bg-[#051c0f] space-y-2">
           <NextLink
             href="/dashboard"
-            className="flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-[#0c361e] hover:bg-[#14532d] text-slate-200 hover:text-white text-xs font-semibold transition border border-[#14532d]"
+            className="flex items-center justify-between w-full px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-[#0c361e] hover:bg-[#14532d] text-slate-200 hover:text-white text-xs font-semibold transition border border-[#14532d]"
           >
             <span className="flex items-center gap-2">
               <Users className="w-4 h-4 text-gold-400" />
@@ -151,7 +148,7 @@ export default function DashboardLayout({
 
           <NextLink
             href="/"
-            className="flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-[#0c361e] hover:bg-[#14532d] text-slate-200 hover:text-white text-xs font-semibold transition border border-[#14532d]"
+            className="flex items-center justify-between w-full px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-[#0c361e] hover:bg-[#14532d] text-slate-200 hover:text-white text-xs font-semibold transition border border-[#14532d]"
           >
             <span>View Public Store</span>
             <ExternalLink className="w-4 h-4 text-emerald-400" />
@@ -180,13 +177,14 @@ export default function DashboardLayout({
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Header */}
-        <header className="sticky top-0 z-30 bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 sm:px-8">
-          <div className="flex items-center gap-3">
+        <header className="sticky top-0 z-30 bg-white border-b border-gray-200 h-14 sm:h-16 flex items-center justify-between px-3 sm:px-8">
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100"
+              className="lg:hidden p-2 rounded-xl text-gray-600 hover:bg-gray-100 transition"
+              aria-label="Open Sidebar Menu"
             >
-              <Menu className="w-6 h-6" />
+              <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
             <div className="hidden sm:flex items-center gap-2 bg-gray-100 rounded-xl px-3 py-1.5 text-xs text-gray-500 w-64">
               <Search className="w-4 h-4 text-gray-400" />
@@ -198,14 +196,15 @@ export default function DashboardLayout({
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <NextLink
               href="/dashboard"
-              className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold px-3 py-1.5 rounded-lg transition"
+              className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-[11px] sm:text-xs font-bold px-2.5 sm:px-3 py-1.5 rounded-lg transition"
               title="View User Dashboard"
             >
               <Users className="w-3.5 h-3.5 text-slate-600" />
-              <span>User Dashboard</span>
+              <span className="hidden sm:inline">User Dashboard</span>
+              <span className="sm:hidden">Buyer View</span>
             </NextLink>
 
             <NextLink
@@ -227,7 +226,7 @@ export default function DashboardLayout({
         </header>
 
         {/* Page Body */}
-        <main className="p-4 sm:p-8 flex-1 max-w-7xl mx-auto w-full">{children}</main>
+        <main className="p-3.5 sm:p-6 lg:p-8 flex-1 max-w-7xl mx-auto w-full">{children}</main>
       </div>
     </div>
   );

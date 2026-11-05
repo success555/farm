@@ -62,11 +62,11 @@ export default function DashboardOrdersPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 sm:space-y-6">
       {/* Page Title */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+          <h1 className="text-xl sm:text-3xl font-black text-gray-900 tracking-tight">
             Orders & Wholesale Dispatch
           </h1>
           <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
@@ -82,8 +82,8 @@ export default function DashboardOrdersPage() {
       </div>
 
       {/* Filter Tabs & Search Bar */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-4 space-y-4 shadow-sm">
-        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
+      <div className="bg-white rounded-2xl border border-gray-200 p-3.5 sm:p-4 space-y-3 sm:space-y-4 shadow-sm">
+        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2.5 sm:gap-3">
           {/* Search */}
           <div className="relative flex-1">
             <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -91,12 +91,12 @@ export default function DashboardOrdersPage() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by order number, buyer name, phone, or town..."
-              className="w-full bg-gray-50 border border-gray-300 rounded-xl pl-9 pr-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-farm-600 focus:bg-white"
+              placeholder="Search by order, buyer, phone, or town..."
+              className="w-full bg-gray-50 border border-gray-300 rounded-xl pl-9 pr-4 py-2 text-base sm:text-xs focus:outline-none focus:ring-2 focus:ring-farm-600 focus:bg-white"
             />
           </div>
 
-          {/* Quick status tabs */}
+          {/* Quick status tabs (Smooth scrolling on mobile) */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
             {[
               { id: 'all', label: 'All' },
@@ -109,7 +109,7 @@ export default function DashboardOrdersPage() {
               <button
                 key={tab.id}
                 onClick={() => setStatusFilter(tab.id)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition shrink-0 ${
                   statusFilter === tab.id
                     ? 'bg-farm-800 text-white shadow-sm'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -122,9 +122,86 @@ export default function DashboardOrdersPage() {
         </div>
       </div>
 
-      {/* Orders Table */}
+      {/* Orders List Container */}
       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile View: Clean Card List */}
+        <div className="block md:hidden divide-y divide-gray-100 p-2">
+          {filteredOrders.length === 0 ? (
+            <p className="py-8 text-center text-xs text-gray-400">No orders match filter.</p>
+          ) : (
+            filteredOrders.map((order) => (
+              <div key={order.id} className="p-3.5 space-y-2.5">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <span className="text-xs font-black text-gray-900 block">{order.orderNumber}</span>
+                    <span className="text-xs font-bold text-gray-800">{order.customerName}</span>
+                    <span className="text-[10px] text-gray-400 block">{order.customerPhone} &bull; {order.destination}</span>
+                  </div>
+                  <div className="flex flex-col items-end gap-1">
+                    <button
+                      onClick={() => handleTogglePayment(order.id)}
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase transition ${
+                        order.paymentStatus === 'paid'
+                          ? 'bg-emerald-100 text-emerald-800'
+                          : 'bg-amber-100 text-amber-800'
+                      }`}
+                    >
+                      {order.paymentStatus}
+                    </button>
+                    <span className="text-[10px] text-gray-500 font-semibold">{order.deliveryMethod}</span>
+                  </div>
+                </div>
+
+                <p className="text-xs text-gray-700 bg-gray-50 p-2 rounded-lg font-medium">{order.itemsSummary}</p>
+
+                <div className="flex justify-between items-center pt-1 border-t border-gray-100">
+                  <div>
+                    <span className="text-[10px] text-gray-400 block">Total</span>
+                    <span className="text-sm font-black text-gray-900">₦{order.totalAmount.toLocaleString()}</span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <select
+                      value={order.status}
+                      onChange={(e) =>
+                        handleUpdateStatus(order.id, e.target.value as DashboardOrder['status'])
+                      }
+                      className="bg-gray-100 border border-gray-200 rounded-lg px-2 py-1 text-[11px] font-bold text-gray-800 focus:outline-none"
+                    >
+                      <option value="pending_payment">Pending</option>
+                      <option value="processing">Processing</option>
+                      <option value="harvesting">Harvesting</option>
+                      <option value="ready_for_pickup">Ready</option>
+                      <option value="in_transit">In Transit</option>
+                      <option value="delivered">Delivered</option>
+                    </select>
+
+                    <button
+                      onClick={() => setSelectedOrder(order)}
+                      className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-100 text-gray-600 transition"
+                      title="View Details"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </button>
+
+                    <a
+                      href={`https://wa.me/${order.customerPhone.replace(/[^0-9]/g, '')}?text=Hello%20${encodeURIComponent(order.customerName)},%20this%20is%20Doutare%20Agro%20Farm%20Limited.%20Regarding%20your%20order%20${order.orderNumber}...`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 transition"
+                      title="Chat on WhatsApp"
+                    >
+                      <MessageSquare className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Desktop View: Full Table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-gray-50 text-gray-600 uppercase font-bold text-[11px] border-b border-gray-200">
               <tr>
@@ -220,65 +297,66 @@ export default function DashboardOrdersPage() {
         </div>
       </div>
 
-      {/* Order Detail Modal */}
+      {/* Order Detail Modal (Responsive for Mobile Screens) */}
       {selectedOrder && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white rounded-2xl sm:rounded-3xl max-w-xl w-full p-5 sm:p-8 space-y-4 sm:space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setSelectedOrder(null)}
-              className="absolute top-6 right-6 text-gray-400 hover:text-gray-600"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 text-gray-400 hover:text-gray-600 p-1"
+              aria-label="Close modal"
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
 
             <div>
-              <span className="text-xs font-bold text-farm-700 uppercase tracking-wider block mb-1">
+              <span className="text-[11px] sm:text-xs font-bold text-farm-700 uppercase tracking-wider block mb-0.5 sm:mb-1">
                 Wholesale Order Specification
               </span>
-              <h2 className="text-2xl font-black text-gray-900">
+              <h2 className="text-xl sm:text-2xl font-black text-gray-900">
                 {selectedOrder.orderNumber}
               </h2>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 text-xs bg-gray-50 p-4 rounded-2xl border border-gray-200">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 text-xs bg-gray-50 p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-200">
               <div>
-                <span className="text-gray-400 block font-semibold">Buyer Name</span>
+                <span className="text-gray-400 block font-semibold text-[11px]">Buyer Name</span>
                 <span className="font-bold text-gray-900">{selectedOrder.customerName}</span>
               </div>
               <div>
-                <span className="text-gray-400 block font-semibold">Contact Phone</span>
+                <span className="text-gray-400 block font-semibold text-[11px]">Contact Phone</span>
                 <span className="font-bold text-gray-900">{selectedOrder.customerPhone}</span>
               </div>
               <div>
-                <span className="text-gray-400 block font-semibold">Delivery Logistics</span>
+                <span className="text-gray-400 block font-semibold text-[11px]">Delivery Logistics</span>
                 <span className="font-bold text-gray-900">{selectedOrder.deliveryMethod}</span>
               </div>
               <div>
-                <span className="text-gray-400 block font-semibold">Destination</span>
+                <span className="text-gray-400 block font-semibold text-[11px]">Destination</span>
                 <span className="font-bold text-gray-900">{selectedOrder.destination}</span>
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500">
                 Ordered Produce Items
               </h3>
-              <p className="text-sm font-semibold text-gray-800 bg-emerald-50/50 p-3.5 rounded-xl border border-emerald-100">
+              <p className="text-xs sm:text-sm font-semibold text-gray-800 bg-emerald-50/50 p-3 sm:p-3.5 rounded-xl border border-emerald-100">
                 {selectedOrder.itemsSummary}
               </p>
             </div>
 
             <div className="flex justify-between items-baseline pt-2 border-t border-gray-100">
-              <span className="text-sm font-bold text-gray-600">Total Order Value:</span>
-              <span className="text-2xl font-black text-farm-900">
+              <span className="text-xs sm:text-sm font-bold text-gray-600">Total Order Value:</span>
+              <span className="text-xl sm:text-2xl font-black text-farm-900">
                 ₦{selectedOrder.totalAmount.toLocaleString()}
               </span>
             </div>
 
-            <div className="flex gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 pt-1">
               <button
                 onClick={() => handleTogglePayment(selectedOrder.id)}
-                className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-xs rounded-xl transition"
+                className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-xs rounded-xl transition text-center"
               >
                 Mark as {selectedOrder.paymentStatus === 'paid' ? 'Unpaid' : 'Paid'}
               </button>
@@ -287,10 +365,10 @@ export default function DashboardOrdersPage() {
                 href={`https://wa.me/${selectedOrder.customerPhone.replace(/[^0-9]/g, '')}?text=Hello%20${encodeURIComponent(selectedOrder.customerName)},%20update%20on%20your%20Doutare%20Agro%20order%20${selectedOrder.orderNumber}:%20Current%20status%20is%20${selectedOrder.status.replace(/_/g, ' ')}.`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5"
+                className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 text-center"
               >
                 <MessageSquare className="w-4 h-4" />
-                <span>Send WhatsApp Dispatch Update</span>
+                <span>WhatsApp Dispatch Update</span>
               </a>
             </div>
           </div>
@@ -299,4 +377,3 @@ export default function DashboardOrdersPage() {
     </div>
   );
 }
-

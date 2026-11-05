@@ -60,31 +60,31 @@ export default function WholesaleEstimator() {
   };
 
   return (
-    <div id="calculator" className="bg-white rounded-3xl border border-gray-200 shadow-xl overflow-hidden">
-      <div className="bg-gradient-to-r from-farm-900 to-farm-800 text-white p-6 sm:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div id="calculator" className="bg-white rounded-2xl sm:rounded-3xl border border-gray-200 shadow-xl overflow-hidden">
+      <div className="bg-gradient-to-r from-farm-900 to-farm-800 text-white p-5 sm:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 text-[10px] sm:text-xs font-bold px-2.5 sm:px-3 py-1 rounded-full uppercase tracking-wider mb-2">
             <Calculator className="w-3.5 h-3.5" />
             <span>Interactive Wholesale Estimator</span>
           </div>
-          <h3 className="text-2xl font-extrabold text-white">Calculate Bulk Produce Orders</h3>
-          <p className="text-sm text-gray-300 mt-1">
+          <h3 className="text-xl sm:text-2xl font-extrabold text-white">Calculate Bulk Produce Orders</h3>
+          <p className="text-xs sm:text-sm text-gray-300 mt-1">
             Real-time farm-gate pricing with automatic bulk volume discount tiers.
           </p>
         </div>
-        <div className="text-right hidden sm:block">
-          <span className="text-xs text-gold-400 font-semibold block uppercase">Farm-Gate & Cargo</span>
-          <span className="text-sm text-gray-200">Ayakoromo &bull; Burutu LGA</span>
+        <div className="text-left sm:text-right">
+          <span className="text-[10px] sm:text-xs text-gold-400 font-semibold block uppercase">Farm-Gate & Cargo</span>
+          <span className="text-xs sm:text-sm text-gray-200">Ayakoromo &bull; Burutu LGA</span>
         </div>
       </div>
 
-      <div className="p-6 sm:p-8 space-y-6">
+      <div className="p-4 sm:p-8 space-y-5 sm:space-y-6">
         {/* Step 1: Choose Product */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">
+          <label className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">
             1. Select Produce
           </label>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-2.5">
             {PRODUCTS.map((p) => {
               const isSelected = p.id === selectedProductId;
               return (
@@ -92,14 +92,14 @@ export default function WholesaleEstimator() {
                   key={p.id}
                   type="button"
                   onClick={() => handleProductChange(p.id)}
-                  className={`text-left p-3 rounded-xl border text-xs transition ${
+                  className={`text-left p-2.5 sm:p-3 rounded-xl border text-xs transition ${
                     isSelected
                       ? 'border-farm-700 bg-emerald-50/80 font-bold text-farm-900 shadow-sm ring-1 ring-farm-600'
                       : 'border-gray-200 bg-gray-50/60 text-gray-700 hover:bg-gray-100'
                   }`}
                 >
-                  <p className="truncate font-semibold">{p.title.split('(')[0]}</p>
-                  <p className="text-[11px] text-gray-500 mt-1 capitalize">{p.category}</p>
+                  <p className="truncate font-semibold text-[11px] sm:text-xs">{p.title.split('(')[0]}</p>
+                  <p className="text-[10px] sm:text-[11px] text-gray-500 mt-0.5 capitalize">{p.category}</p>
                 </button>
               );
             })}
@@ -107,16 +107,16 @@ export default function WholesaleEstimator() {
         </div>
 
         {/* Step 2: Choose Variant & Input Quantity */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 pt-1">
           {/* Variant Selector */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">
+            <label className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-gray-600 mb-1.5 sm:mb-2">
               2. Packaging / Grade Variant
             </label>
             <select
               value={selectedVariantId}
               onChange={(e) => setSelectedVariantId(e.target.value)}
-              className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-sm font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-farm-600 focus:bg-white transition"
+              className="w-full bg-gray-50 border border-gray-300 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-base sm:text-sm font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-farm-600 focus:bg-white transition"
             >
               {product.variants.map((v) => (
                 <option key={v.id} value={v.id}>
@@ -128,11 +128,11 @@ export default function WholesaleEstimator() {
 
           {/* Quantity Input */}
           <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-gray-600">
+            <div className="flex justify-between items-center mb-1.5 sm:mb-2">
+              <label className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-gray-600">
                 3. Desired Quantity ({product.unit}s)
               </label>
-              <span className="text-xs text-farm-700 font-semibold">Min: 1 {product.unit}</span>
+              <span className="text-[11px] sm:text-xs text-farm-700 font-semibold">Min: 1 {product.unit}</span>
             </div>
             <div className="flex items-center gap-2">
               <input
@@ -140,18 +140,18 @@ export default function WholesaleEstimator() {
                 min="1"
                 value={quantity}
                 onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-base font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-farm-600 focus:bg-white transition"
+                className="w-full bg-gray-50 border border-gray-300 rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-base font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-farm-600 focus:bg-white transition"
               />
-              <span className="text-sm font-semibold text-gray-500 uppercase px-2">{product.unit}s</span>
+              <span className="text-xs sm:text-sm font-semibold text-gray-500 uppercase px-2 shrink-0">{product.unit}s</span>
             </div>
           </div>
         </div>
 
         {/* Pricing Breakdown Card */}
-        <div className="bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-5 sm:p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-emerald-800 font-bold uppercase tracking-wider">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[11px] sm:text-xs text-emerald-800 font-bold uppercase tracking-wider">
                 Effective Farm-Gate Unit Rate:
               </span>
               {hasDiscount && (
@@ -162,12 +162,12 @@ export default function WholesaleEstimator() {
               )}
             </div>
             <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl font-black text-gray-900">
+              <span className="text-xl sm:text-2xl font-black text-gray-900">
                 ₦{unitPrice.toLocaleString()}
               </span>
-              <span className="text-sm text-gray-500">/ {product.unit}</span>
+              <span className="text-xs sm:text-sm text-gray-500">/ {product.unit}</span>
               {hasDiscount && (
-                <span className="text-sm line-through text-gray-400">
+                <span className="text-xs sm:text-sm line-through text-gray-400">
                   ₦{variant.price.toLocaleString()}
                 </span>
               )}
@@ -179,22 +179,22 @@ export default function WholesaleEstimator() {
             )}
           </div>
 
-          <div className="text-left md:text-right">
-            <span className="text-xs text-gray-500 font-bold uppercase tracking-wider block">
+          <div className="text-left sm:text-right pt-2 sm:pt-0 border-t sm:border-t-0 border-emerald-200/60 w-full sm:w-auto">
+            <span className="text-[11px] sm:text-xs text-gray-500 font-bold uppercase tracking-wider block">
               Estimated Total
             </span>
-            <span className="text-3xl font-black text-farm-900">
+            <span className="text-2xl sm:text-3xl font-black text-farm-900">
               ₦{estimatedTotal.toLocaleString()}
             </span>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+        <div className="flex flex-col sm:flex-row gap-3 pt-1">
           <button
             type="button"
             onClick={handleAddToCart}
-            className="flex-1 bg-farm-800 hover:bg-farm-900 text-white font-bold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition"
+            className="flex-1 bg-farm-800 hover:bg-farm-900 text-white font-bold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition text-sm sm:text-base"
           >
             {addedToast ? (
               <>
@@ -213,7 +213,7 @@ export default function WholesaleEstimator() {
             href={getWhatsAppOrderUrl()}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 shadow-md transition"
+            className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 shadow-md transition text-sm sm:text-base"
           >
             <MessageSquare className="w-5 h-5" />
             <span>Direct WhatsApp Inquiry</span>
@@ -223,4 +223,3 @@ export default function WholesaleEstimator() {
     </div>
   );
 }
-
