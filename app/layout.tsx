@@ -18,28 +18,28 @@ export const metadata: Metadata = {
   ],
 };
 
+const DEFAULT_CLERK_KEY = 'pk_test_dXAta2FuZ2Fyb28tMTA5MS5jbGVyay5hY2NvdW50cy5kZXYk';
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const clerkKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-  const isClerkConfigured =
-    clerkKey && !clerkKey.includes('placeholder') && clerkKey.startsWith('pk_');
+  const clerkKey =
+    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY &&
+    !process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.includes('placeholder')
+      ? process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+      : DEFAULT_CLERK_KEY;
 
-  const content = (
-    <html lang="en" className="scroll-smooth">
-      <body className="font-sans antialiased text-gray-900 bg-slate-50">
-        <CartProvider>
-          <StoreShell>{children}</StoreShell>
-        </CartProvider>
-      </body>
-    </html>
+  return (
+    <ClerkProvider publishableKey={clerkKey}>
+      <html lang="en" className="scroll-smooth">
+        <body className="font-sans antialiased text-gray-900 bg-slate-50">
+          <CartProvider>
+            <StoreShell>{children}</StoreShell>
+          </CartProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
-
-  if (isClerkConfigured) {
-    return <ClerkProvider publishableKey={clerkKey}>{content}</ClerkProvider>;
-  }
-
-  return content;
 }
