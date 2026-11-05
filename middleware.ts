@@ -1,5 +1,6 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
+import type { NextRequest, NextFetchEvent } from 'next/server';
 
 const isAdminRoute = createRouteMatcher(['/admin(.*)']);
 const isUserDashboardRoute = createRouteMatcher(['/dashboard(.*)']);
@@ -7,29 +8,24 @@ const isUserDashboardRoute = createRouteMatcher(['/dashboard(.*)']);
 const DEFAULT_CLERK_KEY = 'pk_test_dXAta2FuZ2Fyb28tMTA5MS5jbGVyay5hY2NvdW50cy5kZXYk';
 const DEFAULT_CLERK_SECRET_KEY = 'sk_test_Htna3ETdslIAjQTMbNeHnpv9Jfv928C1zN2GoYfR49';
 
-export default clerkMiddleware(
+const clerkHandler = clerkMiddleware(
   (auth, req) => {
-    try {
-      const { userId, sessionClaims } = auth();
+    const { userId, sessionClaims } = auth();
 
-      // 1. Unauthenticated users cannot access either /admin or /dashboard
-      if ((isAdminRoute(req) || isUserDashboardRoute(req)) && !userId) {
-        return auth().redirectToSignIn({ returnBackUrl: req.url });
+    // 1. Unauthenticated users cannot access either /admin or /dashboard
+    if ((isAdminRoute(req) || isUserDashboardRoute(req)) && !userId) {
+      return auth().redirectToSignIn({ returnBackUrl: req.url });
+    }
+
+    // 2. Admin Route Protection: STRICTLY only users with role: 'admin' or 'farm_manager'
+    if (isAdminRoute(req)) {
+      const role = (sessionClaims?.metadata as any)?.role || (sessionClaims as any)?.role;
+
+      // Normal users and any account without admin/farm_manager role CANNOT access /admin
+      if (role !== 'admin' && role !== 'farm_manager') {
+        const userDashboardUrl = new URL('/dashboard', req.url);
+        return NextResponse.redirect(userDashboardUrl);
       }
-
-      // 2. Admin Route Protection: STRICTLY only users with role: 'admin' or 'farm_manager'
-      if (isAdminRoute(req)) {
-        const role = (sessionClaims?.metadata as any)?.role || (sessionClaims as any)?.role;
-
-        // Normal users and any account without admin/farm_manager role CANNOT access /admin
-        if (role !== 'admin' && role !== 'farm_manager') {
-          const userDashboardUrl = new URL('/dashboard', req.url);
-          return NextResponse.redirect(userDashboardUrl);
-        }
-      }
-    } catch (err) {
-      console.warn('Clerk auth middleware caught error:', err);
-      return NextResponse.next();
     }
   },
   {
@@ -38,12 +34,23 @@ export default clerkMiddleware(
   }
 );
 
+export default async function middleware(req: NextRequest, event: NextFetchEvent) {
+  try {
+    return await clerkHandler(req, event);
+  } catch (err) {
+    console.error('Clerk Edge Middleware caught error:', err);
+    // Graceful fallback for protected routes
+    if (req.nextUrl.pathname.startsWith('/admin') || req.nextUrl.pathname.startsWith('/dashboard')) {
+      const signInUrl = new URL('/sign-in', req.url);
+      signInUrl.searchParams.set('redirect_url', req.url);
+      return NextResponse.redirect(signInUrl);
+    }
+    return NextResponse.next();
+  }
+}
+
 export const config = {
-  matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    // Always run for API routes
-    '/(api|trpc)(.*)',
-  ],
+  // Only invoke middleware on protected admin & customer dashboard routes
+  matcher: ['/admin(.*)', '/dashboard(.*)'],
 };
 
